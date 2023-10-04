@@ -6,18 +6,24 @@ Add to `WORKSPACE` file.
 ```starlark
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# The actual snippet see in Releases.
 http_archive(
-    name = "com_github_ebay_rules_ytt",
-    sha256 = "0232522fd7a07d2eb0a47fe4ec3a6dc8bc8e0bcbaa8abd658c6be53a34f5bd76",
-    strip_prefix = "rules_ytt-0.1.0",
+    name = "rules_ytt",
+    sha256 = "<sha256>",
+    strip_prefix = "rules_ytt-X.Y.Z",
     urls = [
-        "https://github.com/eBay/rules_ytt/releases/download/v0.1.0/rules_ytt-0.1.0.zip",
+        "https://github.com/ekhabarov/rules_ytt/releases/download/vX.Y.X/rules_ytt-X.Y.Z.zip",
     ],
 )
 
-load("@com_github_ebay_rules_ytt//:deps.bzl", "ytt_rules_dependencies")
+load("@rules_ytt//ytt:repositories.bzl",
+  "rules_ytt_dependencies",
+  "ytt_register_toolchains",
+)
 
-ytt_rules_dependencies()
+rules_ytt_dependencies()
+
+ytt_register_toolchains()
 ```
 
 ## Usage
@@ -25,7 +31,10 @@ ytt_rules_dependencies()
 Add to `BUILD` file:
 
 ```starlark
-load("@com_github_ebay_rules_ytt//:def.bzl", "ytt")
+load("@rules_ytt//:defs.bzl", "ytt")
+
+# Build an image with rules_docker
+
 load("@io_bazel_rules_docker//go:image.bzl", "go_image")
 
 go_image(
@@ -34,6 +43,17 @@ go_image(
     importpath = "...",
 )
 
+# or with rules_oci
+
+load("@rules_oci//oci:defs.bzl", "oci_image")
+
+oci_image(
+    name = "image",
+    ...
+)
+
+# Generate YAML manifests
+
 ytt(
     name = "manifests",
     srcs = [
@@ -41,6 +61,8 @@ ytt(
         ":defaults.yaml",
         ":values.yaml",
     ],
+    # or
+    # srcs = glob(["*.yaml"]),
     image = ":image.digest",
 )
 ```
@@ -56,10 +78,6 @@ ytt -f base.yaml -f defaults.yaml -f values.yaml --dangerous-allow-all-symlink-d
 * `bazel run //:manifests | kubectl -n <namespace> -f -` - applies generated manifests to k8s cluster.
 
 Image digest is available inside yaml templates as `data.values.image_digest`.
-
-## Commands
-
-[Here](./ytt.md)
 
 ## LICENSE
 

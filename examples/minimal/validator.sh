@@ -1,6 +1,7 @@
 got="$(cat $1)"
-expected="name: valueable_name
-image_digest: my-repo/my-image@sha256:d048a282a0dcc753d9416bc29bda673892d8ea3e0344d394fd64105e4975e835"
+expected="name: YTT
+default: default value
+static: 1"
 
 if [ "$got" = "$expected" ]; then
   echo "Passed"
