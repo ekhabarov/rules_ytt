@@ -1,0 +1,5 @@
+#@ load("@ytt:data", "data")
+---
+name: #@ data.values.name
+default: #@ data.values.default
+static: 1

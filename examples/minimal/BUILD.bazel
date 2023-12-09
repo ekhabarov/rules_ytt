@@ -1,0 +1,19 @@
+load("//:defs.bzl", "ytt")
+
+ytt(
+    name = "manifests",
+    srcs = glob(["*.yaml"]),
+)
+
+sh_library(
+  name = "ytt_lib",
+  data = [":manifests"],
+)
+
+sh_test(
+    srcs = [":validator.sh"],
+    size = "small",
+    name = "ytt_test",
+    args = ["$(location :ytt_lib)"],
+    data = [":ytt_lib"],
+)
