@@ -20,10 +20,25 @@ def http_archive(name, **kwargs):
 # and released only in semver majors.
 # This is all fixed by bzlmod, so we just tolerate it for now.
 def rules_ytt_dependencies():
+    "rules_ytt runtime dependencies."
     pass
 
 def rules_ytt_internal_dependencies():
-    pass
+    "rules_ytt dependencies for internal use only."
+    http_archive(
+        name = "io_bazel_stardoc",
+        sha256 = "ec57139e466faae563f2fc39609da4948a479bb51b6d67aedd7d9b1b8059c433",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/stardoc/releases/download/0.5.4/stardoc-0.5.4.tar.gz",
+            "https://github.com/bazelbuild/stardoc/releases/download/0.5.4/stardoc-0.5.4.tar.gz",
+        ],
+    )
+    http_archive(
+        name = "aspect_bazel_lib",
+        sha256 = "c858cc637db5370f6fd752478d1153955b4b4cbec7ffe95eb4a47a48499a79c3",
+        strip_prefix = "bazel-lib-2.0.3",
+        url = "https://github.com/aspect-build/bazel-lib/releases/download/v2.0.3/bazel-lib-v2.0.3.tar.gz",
+    )
 
 ########
 # Remaining content of the file is only used to support toolchains.
@@ -71,18 +86,18 @@ ytt_repositories = repository_rule(
 )
 
 # Wrapper macro around everything above, this is the primary API
-def ytt_register_toolchains(name = "ytt", version = "0.46.2", register = True, **kwargs):
+def rules_ytt_register_toolchains(name = "ytt", version = "0.46.2", **kwargs):
     """Convenience macro for users which does typical setup.
 
-    - create a repository for each built-in platform like "ytt_linux_amd64" -
+    - create a repository for each built-in platform like `ytt_linux_amd64` -
       this repository is lazily fetched when node is needed for that platform.
-    - create a repository exposing toolchains for each platform like "ytt_platforms"
+    - create a repository exposing toolchains for each platform like `ytt_platforms`
     - register a toolchain pointing at each platform
     Users can avoid this macro and do these steps themselves, if they want more control.
+
     Args:
-        name: base name for all created repos, like "ytt1_14"
-        register: whether to call through to native.register_toolchains.
-            Should be True for WORKSPACE users, but false when used under bzlmod extension
+        name: base name for all created repos, like "ytt"
+        version: Ytt tool version. Supported versions are listed in `ytt/private/versions.bzl`.
         **kwargs: passed to each node_repositories call
     """
     for platform in PLATFORMS.keys():
@@ -92,8 +107,7 @@ def ytt_register_toolchains(name = "ytt", version = "0.46.2", register = True, *
             ytt_version = version,
             **kwargs
         )
-        if register:
-            native.register_toolchains("@%s_toolchains//:%s_toolchain" % (name, platform))
+        native.register_toolchains("@%s_toolchains//:%s_toolchain" % (name, platform))
 
     toolchains_repo(
         name = name + "_toolchains",

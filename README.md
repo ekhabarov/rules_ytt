@@ -18,12 +18,12 @@ http_archive(
 
 load("@rules_ytt//ytt:repositories.bzl",
   "rules_ytt_dependencies",
-  "ytt_register_toolchains",
+  "rules_ytt_register_toolchains",
 )
 
 rules_ytt_dependencies()
 
-ytt_register_toolchains()
+rules_ytt_register_toolchains()
 ```
 
 ## Usage

@@ -1,4 +1,10 @@
 load("//ytt/private:resolved_toolchains.bzl", "resolved_toolchain")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+exports_files(
+    ["repositories.bzl"],
+    visibility = ["//docs:__pkg__"],
+)
 
 # This is the target rule authors should put in their "toolchains"
 # attribute in order to get a runtime for the correct platform.
@@ -14,4 +20,16 @@ resolved_toolchain(
     # even if no toolchain is registered.
     tags = ["manual"],
     visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "repositories",
+    srcs = ["repositories.bzl"],
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "//ytt/private:toolchains_repo",
+        "//ytt/private:versions",
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
 )
