@@ -3,3 +3,5 @@
 name: #@ data.values.name
 default: #@ data.values.default
 static: 1
+#! image.json.sha256 is a file created by image.digest target.
+image: #@ "repo/image@" + data.read("image.json.sha256").strip()

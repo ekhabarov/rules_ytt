@@ -97,7 +97,8 @@ def rules_ytt_register_toolchains(name = "ytt", version = "0.46.2", **kwargs):
 
     Args:
         name: base name for all created repos, like "ytt"
-        version: Ytt tool version. Supported versions are listed in `ytt/private/versions.bzl`.
+        version: Ytt tool version. Supported versions are listed in
+          [versions.bzl](/ytt/private/versions.bzl).
         **kwargs: passed to each node_repositories call
     """
     for platform in PLATFORMS.keys():

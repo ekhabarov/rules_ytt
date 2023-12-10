@@ -93,7 +93,7 @@ Users can avoid this macro and do these steps themselves, if they want more cont
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="rules_ytt_register_toolchains-name"></a>name |  base name for all created repos, like "ytt"   |  <code>"ytt"</code> |
-| <a id="rules_ytt_register_toolchains-version"></a>version |  Ytt tool version. Supported versions are listed in <code>ytt/private/versions.bzl</code>.   |  <code>"0.46.2"</code> |
+| <a id="rules_ytt_register_toolchains-version"></a>version |  Ytt tool version. Supported versions are listed in [versions.bzl](/ytt/private/versions.bzl).   |  <code>"0.46.2"</code> |
 | <a id="rules_ytt_register_toolchains-kwargs"></a>kwargs |  passed to each node_repositories call   |  none |
 
 
