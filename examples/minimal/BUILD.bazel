@@ -1,8 +1,22 @@
 load("//:defs.bzl", "ytt")
 
+# genrule emulates an output for the following target:
+#
+# load("@rules_oci//oci:defs.bzl", "oci_image")
+#
+# oci_image(
+#     name = "image",
+#     ...
+# )
+genrule(
+  name = "image.digest",
+  outs = ["image.json.sha256"],
+  cmd = "echo sha256:ae59f3b71bffe15917f1b4e94218d1d46f21938ff1d1b2a04dfdf77f3763224e > $@",
+)
+
 ytt(
     name = "manifests",
-    srcs = glob(["*.yaml"]),
+    srcs = glob(["*.yaml"]) + [":image.digest"],
 )
 
 sh_library(

@@ -35,12 +35,11 @@ load("@rules_ytt//:defs.bzl", "ytt")
 
 # Build an image with rules_docker
 
-load("@io_bazel_rules_docker//go:image.bzl", "go_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 
-go_image(
+container_image(
     name = "image",
-    srcs = ["main.go"],
-    importpath = "...",
+    ...
 )
 
 # or with rules_oci
@@ -60,24 +59,36 @@ ytt(
         ":base.yaml",
         ":defaults.yaml",
         ":values.yaml",
+        ":image.digest",
     ],
     # or
-    # srcs = glob(["*.yaml"]),
-    image = ":image.digest",
+    # srcs = glob(["*.yaml"]) + [":image.digest"],
 )
 ```
 
 Which is equivalent to
 
 ```shell
-ytt -f base.yaml -f defaults.yaml -f values.yaml --dangerous-allow-all-symlink-destinations
+ytt \
+    -f base.yaml \
+    -f defaults.yaml \
+    -f values.yaml \
+    -f image.json.sha256, # file created by "image.digest" target
+    --dangerous-allow-all-symlink-destinations
 ```
 
-* `bazel build //:manifests` - generates yaml files and store it in cache.
-* `bazel run //:manifests` - prints generated yaml files to stdout.
-* `bazel run //:manifests | kubectl -n <namespace> -f -` - applies generated manifests to k8s cluster.
+Inside YAML template digest can be used like this:
 
-Image digest is available inside yaml templates as `data.values.image_digest`.
+```yaml
+#@ load("@ytt:data", "data")
+---
+image: #@ "repo/image@" + data.read("image.json.sha256").strip()
+```
+### Commands
+
+* `bazel build //:manifests` - generates YAML files and retains them in cache.
+* `bazel run //:manifests` - prints generated YAML files to stdout.
+* `bazel run //:manifests | kubectl -n <namespace> -f -` - applies generated manifests to k8s cluster.
 
 ## LICENSE
 
