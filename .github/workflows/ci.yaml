@@ -96,6 +96,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ needs.bumper.outputs.version }}
         generate_release_notes: true
         body_path: release_notes.txt
         fail_on_unmatched_files: true
