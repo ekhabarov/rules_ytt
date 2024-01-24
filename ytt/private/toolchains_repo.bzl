@@ -40,8 +40,8 @@ PLATFORMS = {
     ),
     "linux_arm64": struct(
         compatible_with = [
-            "@platforms//os:windows",
-            "@platforms//cpu:x86_64",
+            "@platforms//os:linux",
+            "@platforms//cpu:aarch64",
         ],
     ),
 }
