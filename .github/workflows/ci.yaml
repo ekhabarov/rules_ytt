@@ -20,7 +20,7 @@ concurrency:
 jobs:
   bumper:
     name: Validate Release Label and Notes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.bump.outputs.version }}
     steps:
@@ -49,7 +49,7 @@ jobs:
 
   build:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs:
       - bumper
 
@@ -58,28 +58,29 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache Bazel
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.cache/bazel
-        key: bazel-cache-${{ hashFiles('**/BUILD.bazel', '**/*.bzl', 'WORKSPACE') }}
+          ~/.cache/bazel-repo
+        key: bazel-cache-${{ hashFiles('MODULE.bazel', '.bazelversion', 'WORKSPACE') }}
         restore-keys: bazel-cache-
 
     - name: Build everything
-      env:
+      # env:
         # Bazelisk will download bazel to here.
-        XDG_CACHE_HOME: ~/.cache/bazel-repo
+        # XDG_CACHE_HOME: ~/.cache/bazel-repo
       run: bazel --bazelrc=.github/workflows/ci.bazelrc --bazelrc=.bazelrc build //...
 
     - name: Test everything
-      env:
+      # env:
         # Bazelisk will download bazel to here.
-        XDG_CACHE_HOME: ~/.cache/bazel-repo
+        # XDG_CACHE_HOME: ~/.cache/bazel-repo
       run: bazel --bazelrc=.github/workflows/ci.bazelrc --bazelrc=.bazelrc test //...
 
   release:
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: ${{ github.ref == 'refs/heads/main' && needs.bumper.version != 'vnull' }}
     needs:
       - bumper

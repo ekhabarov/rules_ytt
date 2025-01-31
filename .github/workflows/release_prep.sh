@@ -16,7 +16,17 @@ git archive --format=tar --prefix=${PREFIX}/ ${TAG} | gzip > $ARCHIVE
 SHA=$(shasum -a 256 $ARCHIVE | awk '{print $1}')
 
 cat << EOF
-Paste this snippet into your `WORKSPACE.bazel` file:
+## Using bzlmod with Bazel 6 or later:
+
+1. Add \`common --enable_bzlmod\` to \`.bazelrc\`.
+
+2. Add to your \`MODULE.bazel\` file:
+
+\`\`\`starlark
+bazel_dep(name = "rules_ytt", version = "${TAG}")
+\`\`\`
+
+## Using WORKSPACE:
 
 \`\`\`starlark
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
@@ -28,9 +38,7 @@ http_archive(
     url = "https://github.com/ekhabarov/rules_ytt/releases/download/${TAG}/${ARCHIVE}",
 )
 
-load("@rules_ytt//ytt:repositories.bzl", "rules_ytt_dependencies", "rules_ytt_register_toolchains")
-
-rules_ytt_dependencies()
+load("@rules_ytt//ytt:repositories.bzl", "rules_ytt_register_toolchains")
 
 rules_ytt_register_toolchains()
 \`\`\`
