@@ -8,6 +8,9 @@ docs/*.md linguist-generated=true
 # Don't include examples in the distribution artifact, to reduce size.
 # You may want to add additional exclusions for folders or files that users don't need.
 examples export-ignore
+.git export-ignore
+.github export-ignore
+docs export-ignore
 
 # Occasionally there's a need to "stamp" the release version into a file
 ytt/version.bzl export-subst
