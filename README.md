@@ -2,29 +2,7 @@
 
 ## Setup
 
-Add to `WORKSPACE` file.
-```starlark
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-# The actual snippet see in Releases.
-http_archive(
-    name = "rules_ytt",
-    sha256 = "<sha256>",
-    strip_prefix = "rules_ytt-X.Y.Z",
-    urls = [
-        "https://github.com/ekhabarov/rules_ytt/releases/download/vX.Y.X/rules_ytt-X.Y.Z.zip",
-    ],
-)
-
-load("@rules_ytt//ytt:repositories.bzl",
-  "rules_ytt_dependencies",
-  "rules_ytt_register_toolchains",
-)
-
-rules_ytt_dependencies()
-
-rules_ytt_register_toolchains()
-```
+See [releases](https://github.com/ekhabarov/rules_ytt/releases).
 
 ## Usage
 
