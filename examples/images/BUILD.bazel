@@ -1,4 +1,5 @@
-load("//:defs.bzl", "ytt")
+load("@rules_ytt//:defs.bzl", "ytt")
+load("@aspect_bazel_lib//lib:diff_test.bzl", "diff_test")
 
 # genrule emulates an output for the following target:
 #
@@ -15,19 +16,13 @@ genrule(
 )
 
 ytt(
-    name = "manifests",
+    name = "manifest",
     srcs = glob(["*.yaml"]) + [":image.digest"],
 )
 
-sh_library(
-  name = "ytt_lib",
-  data = [":manifests"],
-)
-
-sh_test(
-    srcs = [":validator.sh"],
+diff_test(
+    name = "manifest_test",
+    file2 = "//examples/images/testdata:expected.yaml",
+    file1 = "manifest",
     size = "small",
-    name = "ytt_test",
-    args = ["$(location :ytt_lib)"],
-    data = [":ytt_lib"],
 )

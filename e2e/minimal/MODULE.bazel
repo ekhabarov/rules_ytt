@@ -1,0 +1,6 @@
+bazel_dep(name = "aspect_bazel_lib", version = "2.13.0")
+bazel_dep(name = "rules_ytt", version = "0.0.0")
+local_path_override(
+    module_name = "rules_ytt",
+    path = "../..",
+)

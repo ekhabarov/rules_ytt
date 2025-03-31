@@ -1,0 +1,5 @@
+# This comment as well as an empty line at EOF will be visible when the file is
+# used as text only.
+first: 1
+second: 2
+

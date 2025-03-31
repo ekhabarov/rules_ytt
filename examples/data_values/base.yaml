@@ -1,0 +1,17 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:yaml", "yaml")
+---
+one_as_text: #@ data.values.value_from_one_yaml
+one_as_yaml: #@ yaml.decode(data.values.value_from_one_yaml)
+two_as_yaml: #@ yaml.decode(data.values.value_from_two_yaml)
+dv:
+  - #@ data.values.dv1
+  - #@ data.values.dv2
+  - #@ data.values.dv3
+  #! yaml_values: #@ [v for k, v in data.values.y]
+y_values: #@ data.values.y
+y_values_key1: #@ data.values.y.key1
+---
+available:
+  files: #@ data.list()
+  values: #@ data.values
