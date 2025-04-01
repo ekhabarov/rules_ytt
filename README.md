@@ -11,16 +11,7 @@ Add to `BUILD` file:
 ```starlark
 load("@rules_ytt//:defs.bzl", "ytt")
 
-# Build an image with rules_docker
-
-load("@io_bazel_rules_docker//container:container.bzl", "container_image")
-
-container_image(
-    name = "image",
-    ...
-)
-
-# or with rules_oci
+# Build an image with  rules_oci
 
 load("@rules_oci//oci:defs.bzl", "oci_image")
 

@@ -1,0 +1,14 @@
+load("@rules_ytt//:defs.bzl", "ytt")
+load("@aspect_bazel_lib//lib:diff_test.bzl", "diff_test")
+
+ytt(
+    name = "manifest",
+    srcs = glob(["*.yaml"]),
+)
+
+diff_test(
+    name = "manifest_test",
+    file2 = "//testdata:expected.yaml",
+    file1 = "manifest",
+    size = "small",
+)

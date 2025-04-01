@@ -1,0 +1,30 @@
+load("@rules_ytt//:defs.bzl", "ytt")
+load("@aspect_bazel_lib//lib:diff_test.bzl", "diff_test")
+
+genrule(
+    name = "two_yaml",
+    outs = ["two.yaml"],
+    cmd = "echo 'second_value: data from the second value' > $@"
+)
+
+ytt(
+    name = "manifest",
+    srcs = ["base.yaml"],
+    data_values_file = ["data_values_file.yaml"],
+    data_value_file = {
+        "value_from_one_yaml": "one.yaml",
+        "value_from_two_yaml": ":two_yaml",
+    },
+    data_value_yaml = [
+        "y.key1=val1",
+        "y.key2=val2",
+        "y.key3=val3",
+    ]
+)
+
+diff_test(
+    name = "manifest_test",
+    file2 = "//examples/data_values/testdata:expected.yaml",
+    file1 = "manifest",
+    size = "small",
+)

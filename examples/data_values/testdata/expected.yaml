@@ -1,0 +1,40 @@
+one_as_text: |+
+  # This comment as well as an empty line at EOF will be visible when the file is
+  # used as text only.
+  first: 1
+  second: 2
+
+one_as_yaml:
+  first: 1
+  second: 2
+two_as_yaml:
+  second_value: data from the second value
+dv:
+- aaa
+- bbb
+- ccc
+y_values:
+  key1: val1
+  key2: val2
+  key3: val3
+y_values_key1: val1
+---
+available:
+  files:
+  - base.yaml
+  values:
+    dv1: aaa
+    dv2: bbb
+    dv3: ccc
+    "y":
+      key1: val1
+      key2: val2
+      key3: val3
+    value_from_one_yaml: |+
+      # This comment as well as an empty line at EOF will be visible when the file is
+      # used as text only.
+      first: 1
+      second: 2
+
+    value_from_two_yaml: |
+      second_value: data from the second value
